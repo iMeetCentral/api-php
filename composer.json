@@ -1,0 +1,28 @@
+{
+  "name":        "centraldesktop/api-php",
+  "description": "PHP Sample API client",
+  "bin":         [
+    "bin/cd.php"
+  ],
+  "require":     {
+    "ext-curl":                     "*",
+    "firebase/php-jwt":             "^2.2",
+    "guzzlehttp/guzzle":            "^6.0",
+    "symfony/config":               "^2.7",
+    "symfony/console":              "^2.7",
+    "symfony/dependency-injection": "^2.7",
+    "symfony/yaml":                 "^2.7"
+  },
+  "license":     "Apache-2.0",
+  "authors":     [
+    {
+      "name":  "Trey Hyde",
+      "email": "Trey.Hyde@pgi.com"
+    }
+  ],
+  "autoload":    {
+    "psr-4": {
+      "CentralDesktop\\API\\": "src/"
+    }
+  }
+}
