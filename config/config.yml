@@ -1,0 +1,21 @@
+parameters:
+
+  # NO NEED TO MODIFY ANYTHING BELOW THIS LINE
+  # Configure settings ina client_config.yml
+
+
+
+
+
+  logger.level.debug: 100
+  logger.level.info: 200
+  logger.level.warn: 300
+
+  logger.level: %logger.level.info%
+
+  auth.cd.auth_url: https://oidc.centraldesktop.com/oauth2/token
+  auth.cd.issuer: oidc.centraldesktop.com
+  auth.cd.scp: cd.user
+  auth.cd.grant_type: urn:ietf:params:oauth:grant-type:jwt-bearer
+
+  edge.base_url: https://edge.centraldesktop.com/
