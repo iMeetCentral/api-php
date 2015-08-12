@@ -22,9 +22,10 @@ class AccessToken {
     public $type;
 
 
-    public function __construct($token, $type, $expiresInSeconds){
+    public
+    function __construct($token, $type, $expiresInSeconds) {
         $this->accessToken = $token;
-        $this->type = $type;
+        $this->type        = $type;
 
         $expires = (new DateTime())->add(
             new DateInterval('PT' . ($expiresInSeconds - self::TOKEN_FUDGE_FATCTOR_SECONDS) . 'S')
@@ -33,16 +34,23 @@ class AccessToken {
         $this->expires = $expires;
     }
 
-    public function isFresh(){
-        $now  = new DateTime();
+    public
+    function isFresh() {
+        $now = new DateTime();
 
-        $diff = $now->diff($this->expires);
-        $seconds = $diff->format('%R%s');
+        $diff    = $now->diff($this->expires);
+        $seconds = (intval($diff->format('%r%s')) +
+                    (intval($diff->format('%i')) * 60) +
+                    (intval($diff->format('%h')) * 60 * 60) +
+                    (intval($diff->format('%d')) * 24 * 60 * 60));
+
+        error_log("EXPIRES IN $seconds");
 
         return ($seconds > 0);
     }
 
-    public function __toString() {
-        return ucfirst($this->type)."({$this->accessToken} {$this->expires->format(DATE_ISO8601)})";
+    public
+    function __toString() {
+        return ucfirst($this->type) . "({$this->accessToken} {$this->expires->format(DATE_ISO8601)})";
     }
 }

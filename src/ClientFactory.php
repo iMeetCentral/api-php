@@ -57,6 +57,7 @@ class ClientFactory {
 
         $token = self::getAuthToken();
 
+
         $stack->push(Middleware::mapRequest(function (RequestInterface $r) use ($token) {
             return $r->withHeader('Authorization', 'Bearer ' . $token->accessToken);
         }, 'oauth_bearer'));
