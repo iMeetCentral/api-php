@@ -8,6 +8,7 @@
 
 namespace CentralDesktop\API;
 
+use CentralDesktop\API\Auth\AccessToken;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
@@ -57,8 +58,8 @@ class ClientFactory {
         $token = self::getAuthToken();
 
         $stack->push(Middleware::mapRequest(function (RequestInterface $r) use ($token) {
-            return $r->withHeader('Authorization', 'Bearer ' . $token);
-        },'oauth_bearer'));
+            return $r->withHeader('Authorization', 'Bearer ' . $token->accessToken);
+        }, 'oauth_bearer'));
 
 
         $client = new Client(['handler'  => $stack,
@@ -70,7 +71,7 @@ class ClientFactory {
 
     public static
     function getAuthToken() {
-        if (!is_null(self::$token)) {
+        if (self::$token instanceof AccessToken && self::$token->isFresh()) {
             return self::$token;
         }
 
@@ -83,7 +84,7 @@ class ClientFactory {
             "iss" => $client_id,
             "aud" => $container->getParameter('auth.cd.issuer'),
             "exp" => time() + 600000,
-            "iat" => time(),
+            "iat" => time() - 15000,
             "scp" => $container->getParameter('auth.cd.scp')
         ];
 
@@ -105,8 +106,10 @@ class ClientFactory {
 
         $json_response = json_decode($http_response->getBody()->getContents());
 
-        $access_token = $json_response->access_token;
+        self::$token = new AccessToken($json_response->access_token,
+                                       $json_response->token_type,
+                                       $json_response->expires_in);
 
-        return $access_token;
+        return self::$token;
     }
 }
