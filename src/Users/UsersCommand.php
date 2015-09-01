@@ -31,7 +31,7 @@ class UsersCommand extends Command  {
 
             $result = json_decode($r->getBody()->getContents());
 
-            $output->writeln(print_r($result->items,true));
+            $output->writeln(print_r($result,true));
         }
         catch (ClientException $e) {
             $response = $e->getResponse();
