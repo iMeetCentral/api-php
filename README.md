@@ -1,6 +1,6 @@
 # api-php
 
-Central Desktop CLI and API Sample Code
+iMeet® Central CLI and API Sample Code
 
 Fill in config/client_config.yml with your credentials.   To grab credentials, please see the API tab on the "Company Admin" sections on your account.
 

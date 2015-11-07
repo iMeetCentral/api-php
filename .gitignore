@@ -1,6 +1,6 @@
 composer.phar
 vendor/
-client_config.yml
+config/client_config.yml
 .idea
 *.iml
 
