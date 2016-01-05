@@ -64,7 +64,8 @@ class ClientFactory {
 
 
         $client = new Client(['handler'  => $stack,
-                              'base_uri' => $container->getParameter('edge.base_url')]);
+                              'base_uri' => $container->getParameter('edge.base_url'),
+                              'verify' => false]);
 
         return $client;
     }
@@ -101,7 +102,8 @@ class ClientFactory {
             $container->getParameter('auth.cd.auth_url'),
             ['headers' => ['Content-Type' => 'application/json'],
              'debug'   => self::$debug,
-             'body'    => json_encode($form_params)]
+             'body'    => json_encode($form_params),
+             'verify' => false]
 
         );
 
