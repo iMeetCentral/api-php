@@ -1,28 +1,30 @@
 <?php
+/**
+ * Created by IntelliJ IDEA.
+ * User: kzhu
+ * Date: 5/2/16
+ * Time: 12:07 PM
+ */
+namespace CentralDesktop\API;
 
-namespace CentralDesktop\API\Pagination;
-
-
-use CentralDesktop\API\WithClient;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PaginationCommand extends Command  {
+abstract class PaginationCommand extends Command {
     use WithClient;
-
-    const ENDPOINT_LIST = '/v1/times';
 
     protected
     function configure() {
         $this
-            ->setName('times:Paging')
-            ->setDescription('List time entries by page')
             ->addOption("debug","d", InputOption::VALUE_REQUIRED, false)
             ->addOption("pages", "p", InputOption::VALUE_OPTIONAL, 'number of pages to retrieve', 10)
-            ->addOption("size", "s", InputOption::VALUE_OPTIONAL, 'page size', 1);
+            ->addOption("size", "s", InputOption::VALUE_OPTIONAL, 'page size', 3);
     }
+
+    protected
+    abstract function get_endpoint();
 
     protected
     function execute(InputInterface $input, OutputInterface $output) {
@@ -37,19 +39,18 @@ class PaginationCommand extends Command  {
                 $page_size = 25;
             }
 
-            $url = self::ENDPOINT_LIST."?limit=$page_size";
+            $url = $this->get_endpoint();
+            $r = $client->get($url, ['query' => ['limit' => $page_size]]);
+            $result = json_decode($r->getBody()->getContents());
+            $this->printResult($page_num, $result, $output);
 
-            do {
-                $output->writeln("Loading page $page_num of results");
+            while (isset($result->links) && !empty($result->links->next) && $page_num < $page_num_max) {
+                $url = $result->links->next;
                 $r = $client->get($url);
-                $result = json_decode($r->getBody()->getContents());
-                $url = isset($result->links) && !empty($result->links->next) ? $result->links->next : $url;
-
-                $output->writeln(print_r($result,true));
-                $output->writeln("----------------");
-
                 $page_num++;
-            } while (isset($result->links) && !empty($result->links->next) && $page_num < $page_num_max);
+                $result = json_decode($r->getBody()->getContents());
+                $this->printResult($page_num, $result, $output);
+            }
         }
         catch (ClientException $e) {
             $response = $e->getResponse();
@@ -59,4 +60,10 @@ class PaginationCommand extends Command  {
         }
     }
 
+    private
+    function printResult($page_num, $result, OutputInterface $output) {
+        $output->writeln("Loading page $page_num of results");
+        $output->writeln(print_r($result,true));
+        $output->writeln("----------------");
+    }
 }
