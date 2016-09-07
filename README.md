@@ -9,10 +9,10 @@ This project's dependencies are managed by composer.  See [GetComposer.org](http
 ```composer install```
 
 For example purposes, grab an Auth access token.
-```php ./bin/cd.php auth:token```
+```php ./bin/imc auth:token```
 
 JSON list of users in your account
-```php ./bin/cd.php users:list```
+```php ./bin/imc users:list```
 
 For a full list of commands
-```php ./bin/cd.php```
+```php ./bin/imc```
