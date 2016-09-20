@@ -10,6 +10,10 @@ namespace CentralDesktop\API;
 
 use CentralDesktop\API\Auth\AccessToken;
 use GuzzleHttp\Client;
+use GuzzleHttp\Handler\CurlHandler;
+use GuzzleHttp\Handler\CurlMultiHandler;
+use GuzzleHttp\Handler\Proxy;
+use GuzzleHttp\Handler\StreamHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use JWT;
@@ -21,7 +25,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class ClientFactory {
-    public static  $debug = false;
+    public static $debug = false;
     private static $token = null;
     /** @var Container Configuration Container */
     private static $container = null;
@@ -54,6 +58,8 @@ class ClientFactory {
 
         $stack = new HandlerStack();
         $stack->setHandler(\GuzzleHttp\choose_handler());
+//        $stack->setHandler( Proxy::wrapSync(new CurlMultiHandler(), new CurlHandler()));
+//        $stack->setHandler(new StreamHandler());
 
         $token = self::getAuthToken();
 
@@ -63,9 +69,13 @@ class ClientFactory {
         }, 'oauth_bearer'));
 
 
-        $client = new Client(['handler'  => $stack,
-                              'base_uri' => $container->getParameter('edge.base_url'),
-                              'verify' => false]);
+        $client = new Client(
+            [
+                'handler'  => $stack,
+                'base_uri' => $container->getParameter('edge.base_url'),
+                'verify'   => false
+            ]
+        );
 
         return $client;
     }
@@ -103,7 +113,8 @@ class ClientFactory {
             ['headers' => ['Content-Type' => 'application/json'],
              'debug'   => self::$debug,
              'body'    => json_encode($form_params),
-             'verify' => false]
+             'verify'  => false
+            ]
 
         );
 

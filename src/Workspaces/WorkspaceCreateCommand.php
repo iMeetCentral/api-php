@@ -4,14 +4,14 @@ namespace CentralDesktop\API\Workspaces;
 
 use CentralDesktop\API\PaginationCommand;
 
-class WorkspacesCommand extends PaginationCommand  {
+class WorkspaceListCommand extends PaginationCommand  {
 
     protected
     function configure() {
         parent::configure();
         $this
-            ->setName('workspaces:list')
-            ->setDescription('List workspaces');
+            ->setName('workspaces:create')
+            ->setDescription('Create workspace');
     }
 
     protected

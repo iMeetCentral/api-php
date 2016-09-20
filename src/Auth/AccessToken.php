@@ -44,7 +44,7 @@ class AccessToken {
                     (intval($diff->format('%h')) * 60 * 60) +
                     (intval($diff->format('%d')) * 24 * 60 * 60));
 
-        error_log("EXPIRES IN $seconds");
+//        error_log("EXPIRES IN $seconds");
 
         return ($seconds > 0);
     }
