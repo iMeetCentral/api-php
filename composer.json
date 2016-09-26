@@ -12,7 +12,8 @@
     "symfony/console":              "^2.7",
     "symfony/dependency-injection": "^2.7",
     "symfony/yaml":                 "^2.7",
-    "centraldesktop/phpcollection": "^0.5.1"
+    "centraldesktop/phpcollection": "^0.5.1",
+    "league/csv": "^8.0"
   },
   "license":     "Apache-2.0",
   "authors":     [

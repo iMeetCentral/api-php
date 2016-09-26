@@ -16,3 +16,11 @@ JSON list of users in your account
 
 For a full list of commands
 ```php ./bin/imc```
+
+
+Fun with JSON
+-------------
+
+
+```./bin/imc users:list | jq .[].details.email```
+Lists all user emails in the system

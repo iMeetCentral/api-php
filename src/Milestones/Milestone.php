@@ -14,6 +14,7 @@ class Milestone {
 
     public $title = "Default Milestone Title";
     public $dueDate;
+    public $description;
 
 //    public $milestoneTemplate;
 

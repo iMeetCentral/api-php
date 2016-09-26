@@ -6,6 +6,7 @@ require __DIR__.'/../vendor/autoload.php';
 
 use CentralDesktop\API\Files\UploadFileCommand;
 use CentralDesktop\API\Projects\ProjectsCommand;
+use CentralDesktop\API\Reports\ExportCommand;
 use CentralDesktop\API\Users\UsersCommand;
 use CentralDesktop\API\Workspaces\WorkspaceListCommand;
 use CentralDesktop\API\WorkspaceGroups\WorkspaceGroupListCommand;
@@ -13,14 +14,15 @@ use Symfony\Component\Console\Application;
 use CentralDesktop\API\Auth\AuthCommand;
 use CentralDesktop\API\Times\TimesCommand;
 
-$application = new Application();
-$application->add(new AuthCommand());
-$application->add(new WorkspaceListCommand());
-$application->add(new WorkspaceGroupListCommand());
-$application->add(new UsersCommand());
-$application->add(new UploadFileCommand());
-$application->add(new TimesCommand());
-$application->add(new ProjectsCommand());
+$app = new Application();
+$app->add(new AuthCommand());
+$app->add(new WorkspaceListCommand());
+$app->add(new WorkspaceGroupListCommand());
+$app->add(new UsersCommand());
+$app->add(new UploadFileCommand());
+$app->add(new TimesCommand());
+$app->add(new ProjectsCommand());
+$app->add(new ExportCommand());
 
-$application->run();
+$app->run();
 
