@@ -10,6 +10,7 @@ namespace CentralDesktop\API\Reports;
 
 
 use CentralDesktop\API\WithClient;
+use GuzzleHttp\Exception\ClientException;
 use League\Csv\Writer;
 use PhpCollection\Sequence;
 use SplTempFileObject;
@@ -54,7 +55,9 @@ class ExportCommand extends Command {
     protected
     function execute(InputInterface $input, OutputInterface $output) {
         $outfile = $input->getArgument('outputPath');
-        $json    = \GuzzleHttp\json_decode($this->getResult($input, $output));
+        $result = $this->getResult($input, $output);
+
+        $json    = \GuzzleHttp\json_decode($result);
         $items   = new Sequence($json->items);
 
         $out = new \SplFileObject($outfile,'w+');
@@ -65,7 +68,6 @@ class ExportCommand extends Command {
             $fieldNames = $row->map(function ($r) {
                 return preg_replace("/\./", '__', $r->fieldName);
             });
-//            print_r($fieldNames);
             $csv->insertOne($fieldNames->all());
         });
 
@@ -74,7 +76,6 @@ class ExportCommand extends Command {
             $values = $fields->map(function ($f) {
                 return $f->value;
             });
-//            print_r($values);
             $csv->insertOne($values->all());
         });
     }
